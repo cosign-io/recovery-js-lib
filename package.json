@@ -1,0 +1,25 @@
+{
+  "name": "recovery-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ambisafe/recovery-lib.git"
+  },
+  "author": "Johann Barbie <johannbarbie@me.com> (http://johba.de/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cosign-io/recovery-js-lib/issues"
+  },
+  "homepage": "https://github.com/cosign-io/recovery-js-lib#readme",
+  "dependencies": {
+    "ethereumjs-util": "^4.4.1",
+    "node-uuid": "^1.4.7",
+    "superagent": "^2.0.0",
+    "superagent-jsonapify": "^1.4.1",
+  }
+}
