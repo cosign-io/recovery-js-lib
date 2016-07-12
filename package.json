@@ -20,6 +20,6 @@
     "ethereumjs-util": "^4.4.1",
     "node-uuid": "^1.4.7",
     "superagent": "^2.0.0",
-    "superagent-jsonapify": "^1.4.1",
+    "superagent-jsonapify": "^1.4.1"
   }
 }
