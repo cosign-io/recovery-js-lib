@@ -95,85 +95,113 @@ or
 - As a tenant, I want to nitice suspicios behaviour with user accounts.
 
 
-# recovery-lib
 
-recovery service url: `https://qqkzo192l6.execute-api.eu-central-1.amazonaws.com/prod`
+# API Documentation
 
-ethereum testnet url: `http://52.28.142.166:8555`
-
-## Example Use
-
-```js
-var Lib = require('./lib/index.js');
-var lib = new Lib(null,'https://qqkzo192l6.execute-api.eu-central-1.amazonaws.com/prod');
-lib.setupRequest('75f24a36fbff3e57717b6badf82d3bbca56993dd', '+4915170196026', 'mail@johba.de');
-> { verificationId: '6c2e673c-42af-484e-82b7-6fcf084d9f4d', recoveryId: '3b407ed5-85ec-4c87-8a7e-4301ce4ccf63' }
-lib.confirm(100445, '6c2e673c-42af-484e-82b7-6fcf084d9f4d');
-> { hash: '0x4884ec973c6ac7d6fcd05a18d41b0c0ed32cd33ba0bced3eb472e253762bcaee' }
-lib.recoveryRequest('75f24a36fbff3e57717b6badf82d3bbca56993dd', 'eef24a36fbff3e57717b6badf82d3bbca56993ee', '3b407ed5-85ec-4c87-8a7e-4301ce4ccf63');
-> { id: '8e13133c-22d9-46eb-817b-6390bb3910e7' }
-lib.confirm(394797, '8e13133c-22d9-46eb-817b-6390bb3910e7');
-> { hash: '0x68b995577c6fe6b33c2a03afbb0a0bee962b7e6723570d8d3e121617eff11201' }
 ```
-
-
-## Account Setup
+https://recovery.cosign.io/v1/:address/setup/:recoveryId
+```
 
 Example request:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d
+'{
+  "address": "0x75f24a36fbff3e57717b6badf82d3bbca56993dd",
+  "phone": "+4916170294056",
+  "email": "mail@test.com",
+  "rTenant": "0xb7e0abe65c93c234c9f241312946d7591bbb6fa79033f12bf8e23dc438a71ae5",
+  "sTenant": "0x2d7199c00a5dbec177797b7b136f14c3ba8c46b4ac1125a47ae7f8860254ed26",
+  "vTenant": 27,
+  "nonceTenant": "9b483377-8105-42de-b65b-0aa5a36d0b1a" 
+}'
+https://e87qi0eor1.execute-api.eu-central-1.amazonaws.com/v0/0xec74ccc1a6a9b58a873c060eba49cb868f2a5c6e/setup/782b8c6e-1657-4caf-9b6a-0d1929ea7b19
 ```
-POST /setup/9f160e5a-b6af-45b2-a948-6256693a8072
-{
-  "address": "0xdd0ca418cac231b683c25766850d90fc45d15fdd",
-  "phone": "+491999422851",
-  "email": "test@mail.de",
-  "rTenant": "0xcc519ab33fff77820f9bf2020ec9a86e898bee098430f2ca9345aa6de5089cbe",
-  "sTenant": "0x4b59d4e7f5fa58af9c771c749a7b3848beb3c820620fe24ec1f20a3fa360ee56",
-  "vTenant": 28,
-  "nonceTenant": 1234
-}
-```
+
 
 Example response:
 ```
-{"id": "f559d47b-c9ed-4c65-abff-6a084765b42d"}
+{
+  "verificationId": "9b483377-8105-42de-b65b-0aa5a36d0b1a"
+}
 ```
 
 ## Setup Request Confirmation
 
-Example request:
 ```
-POST /confirm/f559d47b-c9ed-4c65-abff-6a084765b42d
-{
-  "code": 728479,
-}
+https://recovery.cosign.io/v1/:address/confirm/:verificationId
+```
+
+Example request:
+```bash
+curl -X POST -H "Content-Type: application/json" -d
+'{
+  "code": 117803
+}'
+https://e87qi0eor1.execute-api.eu-central-1.amazonaws.com/v0/0xec74ccc1a6a9b58a873c060eba49cb868f2a5c6e/confirm/9b483377-8105-42de-b65b-0aa5a36d0b1a
 ```
 
 Example response:
 ```
-{"hash":"0x34eeda8f7ce6269ed61c088ae8336b668530e826cd803e4988984b36929ccc37"}
+{
+  "txHash":"0xf00bfa87375147ff70597f463139d04678e9033ef8d8717d3ef0b5632caa287a",
+  "verificationId":"9b483377-8105-42de-b65b-0aa5a36d0b1a"
+}
+```
+
+## Confirmation Polling
+
+```
+https://recovery.cosign.io/v1/:address/notification/:verificationId
+```
+
+Example request:
+
+```bash
+curl -X GET -H "Content-Type: application/json"
+https://e87qi0eor1.execute-api.eu-central-1.amazonaws.com/v0/0xec74ccc1a6a9b58a873c060eba49cb868f2a5c6e/notification/9b483377-8105-42de-b65b-0aa5a36d0b1a
+```
+
+Example response:
+
+```
+{
+  "request":"9b483377-8105-42de-b65b-0aa5a36d0b1a",
+  "statusCode":0
+}
 ```
 
 ## Account Recovery
 
-Example request:
 ```
-POST /recovery/9f160e5a-b6af-45b2-a948-6256693a8072
-{
-  "oldAddr": "0xdd0ca418cac231b683c25766850d90fc45d15fdd",
-  "newAddr": "0xee0ca418cac231b683c25766850d90fc45d15fee",
-  "rTenant": "0xad075491ebdb317f1eb77a0e660565f91f1789555aabe0f2b3dc947729aac8d1",
-  "sTenant": "0x137fa810dc252cc09e931209031f8e2db0454581e9ea4e2c4179579f67d30b22",
+https://recovery.cosign.io/v1/:address/recovery/:recoveryId
+```
+
+Example request:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d
+'{
+  "oldAddr": "0x75f24a36fbff3e57717b6badf82d3bbca56993dd",
+  "newAddr": "0x75f24a36fbff3e57717b6badf82d3bbca56993ee",
+  "rTenant": "0x4f0e49c23cde0416cbee3d565e49ece924e169d7746165ff32d7b0af8f97ee34",
+  "sTenant": "0x00c1ae9ac91873f37ff3e6a100d61e796149dc546f0c4d38394e8748b976cdcd",
   "vTenant": 27,
-  "nonceTenant": 12345,
-}
+  "nonceTenant": "5cfae0ae-cc4b-4b7f-8cc9-3ce1e45d95d0" 
+}'
+https://e87qi0eor1.execute-api.eu-central-1.amazonaws.com/v0/0xec74ccc1a6a9b58a873c060eba49cb868f2a5c6e/recovery/782b8c6e-1657-4caf-9b6a-0d1929ea7b19
 ```
 
 Example response:
 ```
-{"id": "f559d47b-c9ed-4c65-abff-6a084765b42d"}
+{
+  "verificationId": "5cfae0ae-cc4b-4b7f-8cc9-3ce1e45d95d0"
+}
 ```
 
 ## Recovery Request Confirmation
+
+
 
 Example request:
 ```
@@ -187,3 +215,4 @@ Example response:
 ```
 {"hash":"0xee723d8be34e7d185d80be4998650811999593a8f4b69113470af0e19c1f7331"}
 ```
+
