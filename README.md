@@ -1,7 +1,7 @@
 
-# Recovery Tenant Lib
+# Ethereum Recovery Oracle
 
-The recovery service is a smart oracle implementation. It's main functionality is to protect from keyloss in blockchain applications with client-side key setups.
+The recovery service is a [Smart Oracle](https://github.com/codius/codius/wiki/Smart-Oracles:-A-Simple,-Powerful-Approach-to-Smart-Contracts) implementation for [Ethereum](https://ethereum.org). It's main functionality is to protect from keyloss in blockchain applications with client-side key setups.
 
 ## Assumptions
 
